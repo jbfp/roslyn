@@ -934,6 +934,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return SyntaxKind.NamespaceKeyword;
                 case "using":
                     return SyntaxKind.UsingKeyword;
+                case "record":
+                    return SyntaxKind.RecordKeyword;
                 case "class":
                     return SyntaxKind.ClassKeyword;
                 case "struct":
@@ -1488,6 +1490,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return "namespace";
                 case SyntaxKind.UsingKeyword:
                     return "using";
+                case SyntaxKind.RecordKeyword:
+                    return "record";
                 case SyntaxKind.ClassKeyword:
                     return "class";
                 case SyntaxKind.StructKeyword:

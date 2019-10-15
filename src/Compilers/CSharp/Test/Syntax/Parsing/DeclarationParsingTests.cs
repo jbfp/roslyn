@@ -723,6 +723,364 @@ namespace Microsoft.CodeAnalysis.CSharp.UnitTests
         }
 
         [Fact]
+        public void TestRecord()
+        {
+            var text = "record a();";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+            Assert.Equal(0, rs.ParameterList.Parameters.Count);
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithBuiltInParameterTypes()
+        {
+            TestRecordWithBuiltInParameterType(SyntaxKind.BoolKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.SByteKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.IntKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.UIntKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.ShortKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.UShortKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.LongKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.ULongKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.FloatKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.DoubleKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.DecimalKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.StringKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.CharKeyword);
+            TestRecordWithBuiltInParameterType(SyntaxKind.ObjectKeyword);
+        }
+
+        private void TestRecordWithBuiltInParameterType(SyntaxKind builtInType)
+        {
+            var typeText = SyntaxFacts.GetText(builtInType);
+            var text = "record a(" + typeText + " b);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal(typeText, rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithParameter()
+        {
+            var text = "record a(b c);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("c", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithMultipleParameters()
+        {
+            var text = "record a(b c, d e);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(2, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("c", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.Equal(0, rs.ParameterList.Parameters[1].AttributeLists.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[1].Modifiers.Count);
+            Assert.NotNull(rs.ParameterList.Parameters[1].Type);
+            Assert.Equal("d", rs.ParameterList.Parameters[1].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[1].Identifier);
+            Assert.Equal("e", rs.ParameterList.Parameters[1].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithRefParameter()
+        {
+            var text = "record a(ref b c);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(1, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.Equal(SyntaxKind.RefKeyword, rs.ParameterList.Parameters[0].Modifiers[0].Kind());
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("c", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithOutParameter()
+        {
+            var text = "record a(out b c);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(1, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.Equal(SyntaxKind.OutKeyword, rs.ParameterList.Parameters[0].Modifiers[0].Kind());
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("c", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithParamsParameter()
+        {
+            var text = "record a(params b c);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(1, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.Equal(SyntaxKind.ParamsKeyword, rs.ParameterList.Parameters[0].Modifiers[0].Kind());
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("c", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithArgListParameter()
+        {
+            var text = "record a(__arglist);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            var errors = file.Errors();
+            Assert.Equal(0, errors.Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal(0, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.Null(rs.ParameterList.Parameters[0].Type);
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestRecordWithParameterAttribute()
+        {
+            var text = "record a([attr] b c);";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, file.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)file.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("a", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+
+            Assert.Equal(1, rs.ParameterList.Parameters.Count);
+            Assert.Equal(1, rs.ParameterList.Parameters[0].AttributeLists.Count);
+            Assert.Equal("[attr]", rs.ParameterList.Parameters[0].AttributeLists[0].ToString());
+            Assert.Equal(0, rs.ParameterList.Parameters[0].Modifiers.Count);
+            Assert.NotNull(rs.ParameterList.Parameters[0].Type);
+            Assert.Equal("b", rs.ParameterList.Parameters[0].Type.ToString());
+            Assert.NotEqual(default, rs.ParameterList.Parameters[0].Identifier);
+            Assert.Equal("c", rs.ParameterList.Parameters[0].Identifier.ToString());
+
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
+        public void TestNestedRecord()
+        {
+            var text = "class a { record b(); }";
+            var file = this.ParseFile(text);
+
+            Assert.NotNull(file);
+            Assert.Equal(1, file.Members.Count);
+            Assert.Equal(text, file.ToString());
+            Assert.Equal(0, file.Errors().Length);
+
+            Assert.Equal(SyntaxKind.ClassDeclaration, file.Members[0].Kind());
+            var cs = (TypeDeclarationSyntax)file.Members[0];
+            Assert.Equal(0, cs.AttributeLists.Count);
+            Assert.Equal(0, cs.Modifiers.Count);
+            Assert.NotEqual(default, cs.Keyword);
+            Assert.Equal(SyntaxKind.ClassKeyword, cs.Keyword.Kind());
+            Assert.NotEqual(default, cs.Identifier);
+            Assert.Equal("a", cs.Identifier.ToString());
+            Assert.Null(cs.BaseList);
+            Assert.Equal(0, cs.ConstraintClauses.Count);
+            Assert.NotEqual(default, cs.OpenBraceToken);
+            Assert.NotEqual(default, cs.CloseBraceToken);
+
+            Assert.Equal(1, cs.Members.Count);
+
+            Assert.Equal(SyntaxKind.RecordDeclaration, cs.Members[0].Kind());
+            var rs = (RecordDeclarationSyntax)cs.Members[0];
+            Assert.NotEqual(default, rs.RecordKeyword);
+            Assert.NotEqual(default, rs.Identifier);
+            Assert.Equal("b", rs.Identifier.ToString());
+            Assert.NotEqual(default, rs.ParameterList.OpenParenToken);
+            Assert.False(rs.ParameterList.OpenParenToken.IsMissing);
+            Assert.Equal(0, rs.ParameterList.Parameters.Count);
+            Assert.NotEqual(default, rs.ParameterList.CloseParenToken);
+            Assert.False(rs.ParameterList.CloseParenToken.IsMissing);
+            Assert.NotEqual(default, rs.SemicolonToken);
+            Assert.False(rs.SemicolonToken.IsMissing);
+        }
+
+        [Fact]
         public void TestClass()
         {
             var text = "class a { }";

@@ -1322,6 +1322,9 @@ tryAgain:
 
             switch (this.CurrentToken.Kind)
             {
+                case SyntaxKind.RecordKeyword:
+                    return this.ParseRecordDeclaration(attributes, modifiers);
+
                 case SyntaxKind.ClassKeyword:
                     // report use of "static class" if feature is unsupported 
                     CheckForVersionSpecificModifiers(modifiers, SyntaxKind.StaticKeyword, MessageID.IDS_FeatureStaticClasses);
@@ -1855,6 +1858,7 @@ tryAgain:
         {
             switch (this.CurrentToken.Kind)
             {
+                case SyntaxKind.RecordKeyword:
                 case SyntaxKind.ClassKeyword:
                 case SyntaxKind.DelegateKeyword:
                 case SyntaxKind.EnumKeyword:
@@ -4459,6 +4463,39 @@ tryAgain:
             finally
             {
                 _pool.Free(variables);
+            }
+        }
+
+        private RecordDeclarationSyntax ParseRecordDeclaration(SyntaxList<AttributeListSyntax> attributes, SyntaxListBuilder modifiers)
+        {
+            Debug.Assert(this.CurrentToken.Kind == SyntaxKind.RecordKeyword);
+
+            var recordToken = this.EatToken(SyntaxKind.RecordKeyword);
+            var saveTerm = _termState;
+            _termState |= TerminatorState.IsEndOfMethodSignature;
+            var name = this.ParseIdentifierToken();
+            var typeParameters = this.ParseTypeParameterList();
+            var parameterList = this.ParseParenthesizedParameterList();
+            var constraints = default(SyntaxListBuilder<TypeParameterConstraintClauseSyntax>);
+            try
+            {
+                if (this.CurrentToken.ContextualKind == SyntaxKind.WhereKeyword)
+                {
+                    constraints = _pool.Allocate<TypeParameterConstraintClauseSyntax>();
+                    this.ParseTypeParameterConstraintClauses(constraints);
+                }
+
+                _termState = saveTerm;
+
+                var semicolon = this.EatToken(SyntaxKind.SemicolonToken);
+                return _syntaxFactory.RecordDeclaration(attributes, modifiers.ToList(), recordToken, name, typeParameters, parameterList, constraints, semicolon);
+            }
+            finally
+            {
+                if (!constraints.IsNull)
+                {
+                    _pool.Free(constraints);
+                }
             }
         }
 
