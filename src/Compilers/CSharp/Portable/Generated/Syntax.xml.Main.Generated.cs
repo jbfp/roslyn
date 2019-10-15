@@ -439,6 +439,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>Called when the visitor visits a TypeParameterSyntax node.</summary>
         public virtual TResult VisitTypeParameter(TypeParameterSyntax node) => this.DefaultVisit(node);
 
+        /// <summary>Called when the visitor visits a RecordDeclarationSyntax node.</summary>
+        public virtual TResult VisitRecordDeclaration(RecordDeclarationSyntax node) => this.DefaultVisit(node);
+
         /// <summary>Called when the visitor visits a ClassDeclarationSyntax node.</summary>
         public virtual TResult VisitClassDeclaration(ClassDeclarationSyntax node) => this.DefaultVisit(node);
 
@@ -1087,6 +1090,9 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>Called when the visitor visits a TypeParameterSyntax node.</summary>
         public virtual void VisitTypeParameter(TypeParameterSyntax node) => this.DefaultVisit(node);
 
+        /// <summary>Called when the visitor visits a RecordDeclarationSyntax node.</summary>
+        public virtual void VisitRecordDeclaration(RecordDeclarationSyntax node) => this.DefaultVisit(node);
+
         /// <summary>Called when the visitor visits a ClassDeclarationSyntax node.</summary>
         public virtual void VisitClassDeclaration(ClassDeclarationSyntax node) => this.DefaultVisit(node);
 
@@ -1734,6 +1740,9 @@ namespace Microsoft.CodeAnalysis.CSharp
 
         public override SyntaxNode? VisitTypeParameter(TypeParameterSyntax node)
             => node.Update(VisitList(node.AttributeLists), VisitToken(node.VarianceKeyword), VisitToken(node.Identifier));
+
+        public override SyntaxNode? VisitRecordDeclaration(RecordDeclarationSyntax node)
+            => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.RecordKeyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (ParameterListSyntax?)Visit(node.ParameterList) ?? throw new ArgumentNullException("parameterList"), VisitList(node.ConstraintClauses), VisitToken(node.SemicolonToken));
 
         public override SyntaxNode? VisitClassDeclaration(ClassDeclarationSyntax node)
             => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), VisitToken(node.Keyword), VisitToken(node.Identifier), (TypeParameterListSyntax?)Visit(node.TypeParameterList), (BaseListSyntax?)Visit(node.BaseList), VisitList(node.ConstraintClauses), VisitToken(node.OpenBraceToken), VisitList(node.Members), VisitToken(node.CloseBraceToken), VisitToken(node.SemicolonToken));
@@ -4324,6 +4333,28 @@ namespace Microsoft.CodeAnalysis.CSharp
         /// <summary>Creates a new TypeParameterSyntax instance.</summary>
         public static TypeParameterSyntax TypeParameter(string identifier)
             => SyntaxFactory.TypeParameter(default, default, SyntaxFactory.Identifier(identifier));
+
+        /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
+        public static RecordDeclarationSyntax RecordDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
+        {
+            if (recordKeyword.Kind() != SyntaxKind.RecordKeyword) throw new ArgumentException(nameof(recordKeyword));
+            if (identifier.Kind() != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
+            if (parameterList == null) throw new ArgumentNullException(nameof(parameterList));
+            if (semicolonToken.Kind() != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
+            return (RecordDeclarationSyntax)Syntax.InternalSyntax.SyntaxFactory.RecordDeclaration(attributeLists.Node.ToGreenList<Syntax.InternalSyntax.AttributeListSyntax>(), modifiers.Node.ToGreenList<Syntax.InternalSyntax.SyntaxToken>(), (Syntax.InternalSyntax.SyntaxToken)recordKeyword.Node!, (Syntax.InternalSyntax.SyntaxToken)identifier.Node!, typeParameterList == null ? null : (Syntax.InternalSyntax.TypeParameterListSyntax)typeParameterList.Green, (Syntax.InternalSyntax.ParameterListSyntax)parameterList.Green, constraintClauses.Node.ToGreenList<Syntax.InternalSyntax.TypeParameterConstraintClauseSyntax>(), (Syntax.InternalSyntax.SyntaxToken)semicolonToken.Node!).CreateRed();
+        }
+
+        /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
+        public static RecordDeclarationSyntax RecordDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses)
+            => SyntaxFactory.RecordDeclaration(attributeLists, modifiers, SyntaxFactory.Token(SyntaxKind.RecordKeyword), identifier, typeParameterList, parameterList, constraintClauses, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+
+        /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
+        public static RecordDeclarationSyntax RecordDeclaration(SyntaxToken identifier)
+            => SyntaxFactory.RecordDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.RecordKeyword), identifier, default, SyntaxFactory.ParameterList(), default, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
+
+        /// <summary>Creates a new RecordDeclarationSyntax instance.</summary>
+        public static RecordDeclarationSyntax RecordDeclaration(string identifier)
+            => SyntaxFactory.RecordDeclaration(default, default(SyntaxTokenList), SyntaxFactory.Token(SyntaxKind.RecordKeyword), SyntaxFactory.Identifier(identifier), default, SyntaxFactory.ParameterList(), default, SyntaxFactory.Token(SyntaxKind.SemicolonToken));
 
         /// <summary>Creates a new ClassDeclarationSyntax instance.</summary>
         public static ClassDeclarationSyntax ClassDeclaration(SyntaxList<AttributeListSyntax> attributeLists, SyntaxTokenList modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, BaseListSyntax? baseList, SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken semicolonToken)

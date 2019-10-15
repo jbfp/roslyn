@@ -3044,6 +3044,43 @@
       </PropertyComment>
     </Field>
   </AbstractNode>
+  <Node Name="RecordDeclarationSyntax" Base="MemberDeclarationSyntax">
+    <TypeComment>
+      <summary>Record type declaration syntax.</summary>
+    </TypeComment>
+    <Kind Name="RecordDeclaration"/>
+    <Field Name="AttributeLists" Type="SyntaxList&lt;AttributeListSyntax&gt;" Override="true"/>
+    <Field Name="Modifiers" Type="SyntaxList&lt;SyntaxToken&gt;" Override="true"/>
+    <Field Name="RecordKeyword" Type="SyntaxToken">
+      <PropertyComment>
+        <summary>Gets the "record" keyword.</summary>
+      </PropertyComment>
+      <Kind Name="RecordKeyword"/>
+    </Field>
+    <Field Name="Identifier" Type="SyntaxToken">
+      <PropertyComment>
+        <summary>Gets the identifier.</summary>
+      </PropertyComment>
+      <Kind Name="IdentifierToken"/>
+    </Field>
+    <Field Name="TypeParameterList" Type="TypeParameterListSyntax" Optional="true"/>
+    <Field Name="ParameterList" Type="ParameterListSyntax">
+      <PropertyComment>
+        <summary>Gets the parameter list.</summary>
+      </PropertyComment>
+    </Field>
+    <Field Name="ConstraintClauses" Type="SyntaxList&lt;TypeParameterConstraintClauseSyntax&gt;">
+      <PropertyComment>
+        <summary>Gets the constraint clause list.</summary>
+      </PropertyComment>
+    </Field>
+    <Field Name="SemicolonToken" Type="SyntaxToken">
+      <PropertyComment>
+        <summary>Gets the semicolon token.</summary>
+      </PropertyComment>
+      <Kind Name="SemicolonToken"/>
+    </Field>
+  </Node>
   <Node Name="ClassDeclarationSyntax" Base="TypeDeclarationSyntax">
     <TypeComment>
       <summary>Class type declaration syntax.</summary>

@@ -83,6 +83,7 @@ member_declaration
   | global_statement
   | incomplete_member
   | namespace_declaration
+  | record_declaration
   ;
 
 base_field_declaration
@@ -314,6 +315,10 @@ incomplete_member
 
 namespace_declaration
   : attribute_list* modifier* 'namespace' name '{' extern_alias_directive* using_directive* member_declaration* '}' ';'?
+  ;
+
+record_declaration
+  : attribute_list* modifier* record_keyword identifier_token type_parameter_list? parameter_list type_parameter_constraint_clause* ';'
   ;
 
 type
@@ -1217,6 +1222,10 @@ interpolated_string_text_token
   ;
 
 numeric_literal_token
+  : /* see lexical specification */
+  ;
+
+record_keyword
   : /* see lexical specification */
   ;
 

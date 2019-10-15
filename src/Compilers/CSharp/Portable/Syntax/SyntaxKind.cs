@@ -148,6 +148,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         BaseKeyword = 8371,
         NamespaceKeyword = 8372,
         UsingKeyword = 8373,
+        RecordKeyword = 8385,
         ClassKeyword = 8374,
         StructKeyword = 8375,
         InterfaceKeyword = 8376,
@@ -509,6 +510,7 @@ namespace Microsoft.CodeAnalysis.CSharp
         NameEquals = 8852,
 
         // type declarations
+        RecordDeclaration = 8854,
         ClassDeclaration = 8855,
         StructDeclaration = 8856,
         InterfaceDeclaration = 8857,

@@ -18604,6 +18604,238 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         public abstract Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<MemberDeclarationSyntax> Members { get; }
     }
 
+    /// <summary>Record type declaration syntax.</summary>
+    internal sealed partial class RecordDeclarationSyntax : MemberDeclarationSyntax
+    {
+        internal readonly GreenNode? attributeLists;
+        internal readonly GreenNode? modifiers;
+        internal readonly SyntaxToken recordKeyword;
+        internal readonly SyntaxToken identifier;
+        internal readonly TypeParameterListSyntax? typeParameterList;
+        internal readonly ParameterListSyntax parameterList;
+        internal readonly GreenNode? constraintClauses;
+        internal readonly SyntaxToken semicolonToken;
+
+        internal RecordDeclarationSyntax(SyntaxKind kind, GreenNode? attributeLists, GreenNode? modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, GreenNode? constraintClauses, SyntaxToken semicolonToken, DiagnosticInfo[] diagnostics, SyntaxAnnotation[] annotations)
+          : base(kind, diagnostics, annotations)
+        {
+            this.SlotCount = 8;
+            if (attributeLists != null)
+            {
+                this.AdjustFlagsAndWidth(attributeLists);
+                this.attributeLists = attributeLists;
+            }
+            if (modifiers != null)
+            {
+                this.AdjustFlagsAndWidth(modifiers);
+                this.modifiers = modifiers;
+            }
+            this.AdjustFlagsAndWidth(recordKeyword);
+            this.recordKeyword = recordKeyword;
+            this.AdjustFlagsAndWidth(identifier);
+            this.identifier = identifier;
+            if (typeParameterList != null)
+            {
+                this.AdjustFlagsAndWidth(typeParameterList);
+                this.typeParameterList = typeParameterList;
+            }
+            this.AdjustFlagsAndWidth(parameterList);
+            this.parameterList = parameterList;
+            if (constraintClauses != null)
+            {
+                this.AdjustFlagsAndWidth(constraintClauses);
+                this.constraintClauses = constraintClauses;
+            }
+            this.AdjustFlagsAndWidth(semicolonToken);
+            this.semicolonToken = semicolonToken;
+        }
+
+        internal RecordDeclarationSyntax(SyntaxKind kind, GreenNode? attributeLists, GreenNode? modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, GreenNode? constraintClauses, SyntaxToken semicolonToken, SyntaxFactoryContext context)
+          : base(kind)
+        {
+            this.SetFactoryContext(context);
+            this.SlotCount = 8;
+            if (attributeLists != null)
+            {
+                this.AdjustFlagsAndWidth(attributeLists);
+                this.attributeLists = attributeLists;
+            }
+            if (modifiers != null)
+            {
+                this.AdjustFlagsAndWidth(modifiers);
+                this.modifiers = modifiers;
+            }
+            this.AdjustFlagsAndWidth(recordKeyword);
+            this.recordKeyword = recordKeyword;
+            this.AdjustFlagsAndWidth(identifier);
+            this.identifier = identifier;
+            if (typeParameterList != null)
+            {
+                this.AdjustFlagsAndWidth(typeParameterList);
+                this.typeParameterList = typeParameterList;
+            }
+            this.AdjustFlagsAndWidth(parameterList);
+            this.parameterList = parameterList;
+            if (constraintClauses != null)
+            {
+                this.AdjustFlagsAndWidth(constraintClauses);
+                this.constraintClauses = constraintClauses;
+            }
+            this.AdjustFlagsAndWidth(semicolonToken);
+            this.semicolonToken = semicolonToken;
+        }
+
+        internal RecordDeclarationSyntax(SyntaxKind kind, GreenNode? attributeLists, GreenNode? modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, GreenNode? constraintClauses, SyntaxToken semicolonToken)
+          : base(kind)
+        {
+            this.SlotCount = 8;
+            if (attributeLists != null)
+            {
+                this.AdjustFlagsAndWidth(attributeLists);
+                this.attributeLists = attributeLists;
+            }
+            if (modifiers != null)
+            {
+                this.AdjustFlagsAndWidth(modifiers);
+                this.modifiers = modifiers;
+            }
+            this.AdjustFlagsAndWidth(recordKeyword);
+            this.recordKeyword = recordKeyword;
+            this.AdjustFlagsAndWidth(identifier);
+            this.identifier = identifier;
+            if (typeParameterList != null)
+            {
+                this.AdjustFlagsAndWidth(typeParameterList);
+                this.typeParameterList = typeParameterList;
+            }
+            this.AdjustFlagsAndWidth(parameterList);
+            this.parameterList = parameterList;
+            if (constraintClauses != null)
+            {
+                this.AdjustFlagsAndWidth(constraintClauses);
+                this.constraintClauses = constraintClauses;
+            }
+            this.AdjustFlagsAndWidth(semicolonToken);
+            this.semicolonToken = semicolonToken;
+        }
+
+        public override Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax> AttributeLists => new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax>(this.attributeLists);
+        public override Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken> Modifiers => new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken>(this.modifiers);
+        /// <summary>Gets the "record" keyword.</summary>
+        public SyntaxToken RecordKeyword => this.recordKeyword;
+        /// <summary>Gets the identifier.</summary>
+        public SyntaxToken Identifier => this.identifier;
+        public TypeParameterListSyntax? TypeParameterList => this.typeParameterList;
+        /// <summary>Gets the parameter list.</summary>
+        public ParameterListSyntax ParameterList => this.parameterList;
+        /// <summary>Gets the constraint clause list.</summary>
+        public Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax> ConstraintClauses => new Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax>(this.constraintClauses);
+        /// <summary>Gets the semicolon token.</summary>
+        public SyntaxToken SemicolonToken => this.semicolonToken;
+
+        internal override GreenNode? GetSlot(int index)
+            => index switch
+            {
+                0 => this.attributeLists,
+                1 => this.modifiers,
+                2 => this.recordKeyword,
+                3 => this.identifier,
+                4 => this.typeParameterList,
+                5 => this.parameterList,
+                6 => this.constraintClauses,
+                7 => this.semicolonToken,
+                _ => null,
+            };
+
+        internal override SyntaxNode CreateRed(SyntaxNode? parent, int position) => new CSharp.Syntax.RecordDeclarationSyntax(this, parent, position);
+
+        public override void Accept(CSharpSyntaxVisitor visitor) => visitor.VisitRecordDeclaration(this);
+        public override TResult Accept<TResult>(CSharpSyntaxVisitor<TResult> visitor) => visitor.VisitRecordDeclaration(this);
+
+        public RecordDeclarationSyntax Update(Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax> attributeLists, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken> modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax typeParameterList, ParameterListSyntax parameterList, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
+        {
+            if (attributeLists != this.AttributeLists || modifiers != this.Modifiers || recordKeyword != this.RecordKeyword || identifier != this.Identifier || typeParameterList != this.TypeParameterList || parameterList != this.ParameterList || constraintClauses != this.ConstraintClauses || semicolonToken != this.SemicolonToken)
+            {
+                var newNode = SyntaxFactory.RecordDeclaration(attributeLists, modifiers, recordKeyword, identifier, typeParameterList, parameterList, constraintClauses, semicolonToken);
+                var diags = GetDiagnostics();
+                if (diags?.Length > 0)
+                    newNode = newNode.WithDiagnosticsGreen(diags);
+                var annotations = GetAnnotations();
+                if (annotations?.Length > 0)
+                    newNode = newNode.WithAnnotationsGreen(annotations);
+                return newNode;
+            }
+
+            return this;
+        }
+
+        internal override GreenNode SetDiagnostics(DiagnosticInfo[] diagnostics)
+            => new RecordDeclarationSyntax(this.Kind, this.attributeLists, this.modifiers, this.recordKeyword, this.identifier, this.typeParameterList, this.parameterList, this.constraintClauses, this.semicolonToken, diagnostics, GetAnnotations());
+
+        internal override GreenNode SetAnnotations(SyntaxAnnotation[] annotations)
+            => new RecordDeclarationSyntax(this.Kind, this.attributeLists, this.modifiers, this.recordKeyword, this.identifier, this.typeParameterList, this.parameterList, this.constraintClauses, this.semicolonToken, GetDiagnostics(), annotations);
+
+        internal RecordDeclarationSyntax(ObjectReader reader)
+          : base(reader)
+        {
+            this.SlotCount = 8;
+            var attributeLists = (GreenNode?)reader.ReadValue();
+            if (attributeLists != null)
+            {
+                AdjustFlagsAndWidth(attributeLists);
+                this.attributeLists = attributeLists;
+            }
+            var modifiers = (GreenNode?)reader.ReadValue();
+            if (modifiers != null)
+            {
+                AdjustFlagsAndWidth(modifiers);
+                this.modifiers = modifiers;
+            }
+            var recordKeyword = (SyntaxToken)reader.ReadValue();
+            AdjustFlagsAndWidth(recordKeyword);
+            this.recordKeyword = recordKeyword;
+            var identifier = (SyntaxToken)reader.ReadValue();
+            AdjustFlagsAndWidth(identifier);
+            this.identifier = identifier;
+            var typeParameterList = (TypeParameterListSyntax?)reader.ReadValue();
+            if (typeParameterList != null)
+            {
+                AdjustFlagsAndWidth(typeParameterList);
+                this.typeParameterList = typeParameterList;
+            }
+            var parameterList = (ParameterListSyntax)reader.ReadValue();
+            AdjustFlagsAndWidth(parameterList);
+            this.parameterList = parameterList;
+            var constraintClauses = (GreenNode?)reader.ReadValue();
+            if (constraintClauses != null)
+            {
+                AdjustFlagsAndWidth(constraintClauses);
+                this.constraintClauses = constraintClauses;
+            }
+            var semicolonToken = (SyntaxToken)reader.ReadValue();
+            AdjustFlagsAndWidth(semicolonToken);
+            this.semicolonToken = semicolonToken;
+        }
+
+        internal override void WriteTo(ObjectWriter writer)
+        {
+            base.WriteTo(writer);
+            writer.WriteValue(this.attributeLists);
+            writer.WriteValue(this.modifiers);
+            writer.WriteValue(this.recordKeyword);
+            writer.WriteValue(this.identifier);
+            writer.WriteValue(this.typeParameterList);
+            writer.WriteValue(this.parameterList);
+            writer.WriteValue(this.constraintClauses);
+            writer.WriteValue(this.semicolonToken);
+        }
+
+        static RecordDeclarationSyntax()
+        {
+            ObjectBinder.RegisterTypeReader(typeof(RecordDeclarationSyntax), r => new RecordDeclarationSyntax(r));
+        }
+    }
+
     /// <summary>Class type declaration syntax.</summary>
     internal sealed partial class ClassDeclarationSyntax : TypeDeclarationSyntax
     {
@@ -30367,6 +30599,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         public virtual TResult VisitNameEquals(NameEqualsSyntax node) => this.DefaultVisit(node);
         public virtual TResult VisitTypeParameterList(TypeParameterListSyntax node) => this.DefaultVisit(node);
         public virtual TResult VisitTypeParameter(TypeParameterSyntax node) => this.DefaultVisit(node);
+        public virtual TResult VisitRecordDeclaration(RecordDeclarationSyntax node) => this.DefaultVisit(node);
         public virtual TResult VisitClassDeclaration(ClassDeclarationSyntax node) => this.DefaultVisit(node);
         public virtual TResult VisitStructDeclaration(StructDeclarationSyntax node) => this.DefaultVisit(node);
         public virtual TResult VisitInterfaceDeclaration(InterfaceDeclarationSyntax node) => this.DefaultVisit(node);
@@ -30586,6 +30819,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
         public virtual void VisitNameEquals(NameEqualsSyntax node) => this.DefaultVisit(node);
         public virtual void VisitTypeParameterList(TypeParameterListSyntax node) => this.DefaultVisit(node);
         public virtual void VisitTypeParameter(TypeParameterSyntax node) => this.DefaultVisit(node);
+        public virtual void VisitRecordDeclaration(RecordDeclarationSyntax node) => this.DefaultVisit(node);
         public virtual void VisitClassDeclaration(ClassDeclarationSyntax node) => this.DefaultVisit(node);
         public virtual void VisitStructDeclaration(StructDeclarationSyntax node) => this.DefaultVisit(node);
         public virtual void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node) => this.DefaultVisit(node);
@@ -31088,6 +31322,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
 
         public override CSharpSyntaxNode VisitTypeParameter(TypeParameterSyntax node)
             => node.Update(VisitList(node.AttributeLists), (SyntaxToken)Visit(node.VarianceKeyword), (SyntaxToken)Visit(node.Identifier));
+
+        public override CSharpSyntaxNode VisitRecordDeclaration(RecordDeclarationSyntax node)
+            => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (SyntaxToken)Visit(node.RecordKeyword), (SyntaxToken)Visit(node.Identifier), (TypeParameterListSyntax)Visit(node.TypeParameterList), (ParameterListSyntax)Visit(node.ParameterList), VisitList(node.ConstraintClauses), (SyntaxToken)Visit(node.SemicolonToken));
 
         public override CSharpSyntaxNode VisitClassDeclaration(ClassDeclarationSyntax node)
             => node.Update(VisitList(node.AttributeLists), VisitList(node.Modifiers), (SyntaxToken)Visit(node.Keyword), (SyntaxToken)Visit(node.Identifier), (TypeParameterListSyntax)Visit(node.TypeParameterList), (BaseListSyntax)Visit(node.BaseList), VisitList(node.ConstraintClauses), (SyntaxToken)Visit(node.OpenBraceToken), VisitList(node.Members), (SyntaxToken)Visit(node.CloseBraceToken), (SyntaxToken)Visit(node.SemicolonToken));
@@ -34367,6 +34604,21 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             }
 
             return result;
+        }
+
+        public RecordDeclarationSyntax RecordDeclaration(Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax> attributeLists, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken> modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
+        {
+            #if DEBUG
+            if (recordKeyword == null) throw new ArgumentNullException(nameof(recordKeyword));
+            if (recordKeyword.Kind != SyntaxKind.RecordKeyword) throw new ArgumentException(nameof(recordKeyword));
+            if (identifier == null) throw new ArgumentNullException(nameof(identifier));
+            if (identifier.Kind != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
+            if (parameterList == null) throw new ArgumentNullException(nameof(parameterList));
+            if (semicolonToken == null) throw new ArgumentNullException(nameof(semicolonToken));
+            if (semicolonToken.Kind != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
+            #endif
+
+            return new RecordDeclarationSyntax(SyntaxKind.RecordDeclaration, attributeLists.Node, modifiers.Node, recordKeyword, identifier, typeParameterList, parameterList, constraintClauses.Node, semicolonToken, this.context);
         }
 
         public ClassDeclarationSyntax ClassDeclaration(Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax> attributeLists, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken> modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, BaseListSyntax? baseList, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken? semicolonToken)
@@ -38933,6 +39185,21 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
             return result;
         }
 
+        public static RecordDeclarationSyntax RecordDeclaration(Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax> attributeLists, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken> modifiers, SyntaxToken recordKeyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, ParameterListSyntax parameterList, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken semicolonToken)
+        {
+            #if DEBUG
+            if (recordKeyword == null) throw new ArgumentNullException(nameof(recordKeyword));
+            if (recordKeyword.Kind != SyntaxKind.RecordKeyword) throw new ArgumentException(nameof(recordKeyword));
+            if (identifier == null) throw new ArgumentNullException(nameof(identifier));
+            if (identifier.Kind != SyntaxKind.IdentifierToken) throw new ArgumentException(nameof(identifier));
+            if (parameterList == null) throw new ArgumentNullException(nameof(parameterList));
+            if (semicolonToken == null) throw new ArgumentNullException(nameof(semicolonToken));
+            if (semicolonToken.Kind != SyntaxKind.SemicolonToken) throw new ArgumentException(nameof(semicolonToken));
+            #endif
+
+            return new RecordDeclarationSyntax(SyntaxKind.RecordDeclaration, attributeLists.Node, modifiers.Node, recordKeyword, identifier, typeParameterList, parameterList, constraintClauses.Node, semicolonToken);
+        }
+
         public static ClassDeclarationSyntax ClassDeclaration(Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<AttributeListSyntax> attributeLists, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<SyntaxToken> modifiers, SyntaxToken keyword, SyntaxToken identifier, TypeParameterListSyntax? typeParameterList, BaseListSyntax? baseList, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<TypeParameterConstraintClauseSyntax> constraintClauses, SyntaxToken openBraceToken, Microsoft.CodeAnalysis.Syntax.InternalSyntax.SyntaxList<MemberDeclarationSyntax> members, SyntaxToken closeBraceToken, SyntaxToken? semicolonToken)
         {
             #if DEBUG
@@ -40586,6 +40853,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax.InternalSyntax
                 typeof(NameEqualsSyntax),
                 typeof(TypeParameterListSyntax),
                 typeof(TypeParameterSyntax),
+                typeof(RecordDeclarationSyntax),
                 typeof(ClassDeclarationSyntax),
                 typeof(StructDeclarationSyntax),
                 typeof(InterfaceDeclarationSyntax),
