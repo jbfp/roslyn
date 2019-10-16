@@ -313,6 +313,9 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case TypeKind.Delegate:
                     mods |= DeclarationModifiers.Sealed;
                     break;
+                case TypeKind.Record:
+                    mods |= DeclarationModifiers.Sealed;
+                    break;
             }
 
             return mods;
@@ -2377,6 +2380,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case TypeKind.Class:
                 case TypeKind.Interface:
                 case TypeKind.Submission:
+                case TypeKind.Record:
                     // No additional checking required.
                     AddSynthesizedConstructorsIfNecessary(builder.NonTypeNonIndexerMembers, builder.StaticInitializers, diagnostics);
                     break;
@@ -2446,6 +2450,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case SyntaxKind.StructDeclaration:
                         var structDecl = (StructDeclarationSyntax)syntax;
                         AddNonTypeMembers(builder, structDecl.Members, diagnostics);
+                        break;
+
+                    case SyntaxKind.RecordDeclaration:
+                        SourceRecordMethodSymbol.AddRecordMembers(this, builder.NonTypeNonIndexerMembers, (RecordDeclarationSyntax)syntax, diagnostics);
                         break;
 
                     default:

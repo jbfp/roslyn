@@ -184,6 +184,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.Delegate:
                 case TypeKind.Array:
                 case TypeKind.Dynamic:
+                case TypeKind.Record:
                     this.LookupMembersInClass(result, type, name, arity, basesBeingResolved, options, originalBinder, diagnose, ref useSiteDiagnostics);
                     break;
 
@@ -1665,6 +1666,7 @@ symIsHidden:;
                 case TypeKind.Delegate:
                 case TypeKind.Array:
                 case TypeKind.Dynamic:
+                case TypeKind.Record:
                     this.AddMemberLookupSymbolsInfoInClass(result, type, options, originalBinder, type);
                     break;
 

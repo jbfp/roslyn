@@ -287,6 +287,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case TypeKind.Interface:
                 case TypeKind.Delegate:
                 case TypeKind.Error:
+                case TypeKind.Record:
                     break;
                 default:
                     return false;

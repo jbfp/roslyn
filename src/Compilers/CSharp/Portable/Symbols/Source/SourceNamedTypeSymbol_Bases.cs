@@ -652,6 +652,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                         declaredBase = compilation.GetSpecialType(SpecialType.System_MulticastDelegate);
                         break;
 
+                    case TypeKind.Record:
+                        declaredBase = compilation.GetSpecialType(SpecialType.System_Object);
+                        break;
+
                     default:
                         throw ExceptionUtilities.UnexpectedValue(typeKind);
                 }

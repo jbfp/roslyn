@@ -560,6 +560,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case TypeKind.Enum:
                 case TypeKind.Delegate:
                 case TypeKind.Submission:
+                case TypeKind.Record:
                     return !IsAsRestrictive((NamedTypeSymbol)type, sym, ref useSiteDiagnostics);
 
                 default:
@@ -629,6 +630,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case TypeKind.Interface:
                     case TypeKind.Enum:
                     case TypeKind.Delegate:
+                    case TypeKind.Record:
                         {
                             var containingType = current.ContainingType;
                             if ((object)containingType != null)
@@ -678,6 +680,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                     case TypeKind.Struct:
                     case TypeKind.Interface:
                     case TypeKind.Delegate:
+                    case TypeKind.Record:
                         if (current.IsTupleType)
                         {
                             // turn tuple type elements into parameters
@@ -1111,6 +1114,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 case TypeKind.Error:
                 case TypeKind.Interface:
                 case TypeKind.Pointer:
+                case TypeKind.Record:
                     return true;
 
                 case TypeKind.Enum:

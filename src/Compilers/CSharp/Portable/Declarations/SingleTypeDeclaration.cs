@@ -171,9 +171,9 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return false;
                 }
 
-                if (thisDecl._kind == DeclarationKind.Enum || thisDecl._kind == DeclarationKind.Delegate)
+                if (thisDecl._kind == DeclarationKind.Enum || thisDecl._kind == DeclarationKind.Delegate || thisDecl._kind == DeclarationKind.Record)
                 {
-                    // oh, so close, but enums and delegates cannot be partial
+                    // oh, so close, but enums, delegates, and records cannot be partial
                     return false;
                 }
 

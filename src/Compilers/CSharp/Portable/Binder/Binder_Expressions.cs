@@ -3895,6 +3895,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.Struct:
                 case TypeKind.Class:
                 case TypeKind.Enum:
+                case TypeKind.Record:
                 case TypeKind.Error:
                     return BindClassCreationExpression(node, (NamedTypeSymbol)type, GetName(node.Type), diagnostics, originalType);
 

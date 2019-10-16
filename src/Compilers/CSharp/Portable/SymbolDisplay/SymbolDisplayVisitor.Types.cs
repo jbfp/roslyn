@@ -542,6 +542,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return SymbolDisplayPartKind.InterfaceName;
                 case TypeKind.Struct:
                     return SymbolDisplayPartKind.StructName;
+                case TypeKind.Record:
+                    return SymbolDisplayPartKind.RecordName;
                 default:
                     throw ExceptionUtilities.UnexpectedValue(symbol.TypeKind);
             }
@@ -623,6 +625,11 @@ namespace Microsoft.CodeAnalysis.CSharp
                         case TypeKind.Module:
                         case TypeKind.Class:
                             AddKeyword(SyntaxKind.ClassKeyword);
+                            AddSpace();
+                            break;
+
+                        case TypeKind.Record:
+                            AddKeyword(SyntaxKind.RecordKeyword);
                             AddSpace();
                             break;
 

@@ -176,6 +176,15 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         /// Get a source type symbol for the given declaration syntax.
         /// </summary>
         /// <returns>Null if there is no matching declaration.</returns>
+        internal SourceNamedTypeSymbol GetSourceTypeMember(RecordDeclarationSyntax syntax)
+        {
+            return GetSourceTypeMember(syntax.Identifier.ValueText, syntax.Arity, syntax.Kind(), syntax);
+        }
+
+        /// <summary>
+        /// Get a source type symbol for the given declaration syntax.
+        /// </summary>
+        /// <returns>Null if there is no matching declaration.</returns>
         internal SourceNamedTypeSymbol GetSourceTypeMember(DelegateDeclarationSyntax syntax)
         {
             return GetSourceTypeMember(syntax.Identifier.ValueText, syntax.Arity, syntax.Kind(), syntax);
@@ -197,7 +206,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                 kind == SyntaxKind.StructDeclaration ||
                 kind == SyntaxKind.InterfaceDeclaration ||
                 kind == SyntaxKind.EnumDeclaration ||
-                kind == SyntaxKind.DelegateDeclaration);
+                kind == SyntaxKind.DelegateDeclaration ||
+                kind == SyntaxKind.RecordDeclaration);
 
             TypeKind typeKind = kind.ToDeclarationKind().ToTypeKind();
 

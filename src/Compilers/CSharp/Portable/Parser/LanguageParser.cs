@@ -1827,6 +1827,7 @@ tryAgain:
                 case SyntaxKind.ProtectedKeyword:
                 case SyntaxKind.PublicKeyword:
                 case SyntaxKind.ReadOnlyKeyword:
+                case SyntaxKind.RecordKeyword:
                 case SyntaxKind.SByteKeyword:
                 case SyntaxKind.SealedKeyword:
                 case SyntaxKind.ShortKeyword:
