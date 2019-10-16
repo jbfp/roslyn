@@ -340,6 +340,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.DelegateDeclaration:
                 case SyntaxKind.EnumDeclaration:
+                case SyntaxKind.RecordDeclaration:
                     return true;
 
                 default:
@@ -785,6 +786,8 @@ namespace Microsoft.CodeAnalysis.CSharp
                     return SyntaxKind.StructDeclaration;
                 case SyntaxKind.InterfaceKeyword:
                     return SyntaxKind.InterfaceDeclaration;
+                case SyntaxKind.RecordKeyword:
+                    return SyntaxKind.RecordDeclaration;
                 default:
                     return SyntaxKind.None;
             }

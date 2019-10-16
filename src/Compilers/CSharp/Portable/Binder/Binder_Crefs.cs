@@ -548,6 +548,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                     }
 
                     return false;
+                case TypeKind.Record:
                 case TypeKind.Dynamic:
                 case TypeKind.TypeParameter:
                     return false;

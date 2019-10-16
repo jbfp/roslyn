@@ -141,6 +141,13 @@ namespace Microsoft.CodeAnalysis.CSharp.Syntax
             return IsBeforeToken(position, accessorDecl, lastToken);
         }
 
+        internal static bool IsInRecordDeclaration(int position, RecordDeclarationSyntax recordDecl)
+        {
+            Debug.Assert(recordDecl != null);
+
+            return IsBeforeToken(position, recordDecl, recordDecl.SemicolonToken);
+        }
+
         internal static bool IsInDelegateDeclaration(int position, DelegateDeclarationSyntax delegateDecl)
         {
             Debug.Assert(delegateDecl != null);

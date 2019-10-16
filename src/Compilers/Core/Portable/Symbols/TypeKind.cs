@@ -81,5 +81,10 @@ namespace Microsoft.CodeAnalysis
         /// Type is an interactive submission.
         /// </summary>
         Submission = 12,
+
+        /// <summary>
+        /// Type is a record.
+        /// </summary>
+        Record = 13,
     }
 }

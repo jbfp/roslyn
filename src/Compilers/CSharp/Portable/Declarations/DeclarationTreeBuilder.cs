@@ -381,6 +381,35 @@ namespace Microsoft.CodeAnalysis.CSharp
             return children.ToImmutableAndFree();
         }
 
+        public override SingleNamespaceOrTypeDeclaration VisitRecordDeclaration(RecordDeclarationSyntax node)
+        {
+            var declFlags = node.AttributeLists.Any()
+                ? SingleTypeDeclaration.TypeDeclarationFlags.HasAnyAttributes
+                : SingleTypeDeclaration.TypeDeclarationFlags.None;
+
+            var diagnostics = DiagnosticBag.GetInstance();
+            if (node.Arity == 0)
+            {
+                Symbol.ReportErrorIfHasConstraints(node.ConstraintClauses, diagnostics);
+            }
+
+            declFlags |= SingleTypeDeclaration.TypeDeclarationFlags.HasAnyNontypeMembers;
+
+            var modifiers = node.Modifiers.ToDeclarationModifiers(diagnostics: diagnostics);
+
+            return new SingleTypeDeclaration(
+                kind: DeclarationKind.Record,
+                name: node.Identifier.ValueText,
+                modifiers: modifiers,
+                declFlags: declFlags,
+                arity: node.Arity,
+                syntaxReference: _syntaxTree.GetReference(node),
+                nameLocation: new SourceLocation(node.Identifier),
+                memberNames: ImmutableHashSet<string>.Empty,
+                children: ImmutableArray<SingleTypeDeclaration>.Empty,
+                diagnostics: diagnostics.ToReadOnlyAndFree());
+        }
+
         public override SingleNamespaceOrTypeDeclaration VisitDelegateDeclaration(DelegateDeclarationSyntax node)
         {
             var declFlags = node.AttributeLists.Any()

@@ -80,7 +80,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
                          declaration.Kind == DeclarationKind.Interface ||
                          declaration.Kind == DeclarationKind.Enum ||
                          declaration.Kind == DeclarationKind.Delegate ||
-                         declaration.Kind == DeclarationKind.Class);
+                         declaration.Kind == DeclarationKind.Class ||
+                         declaration.Kind == DeclarationKind.Record);
 
             if (containingSymbol.Kind == SymbolKind.NamedType)
             {
@@ -97,6 +98,8 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             {
                 case SyntaxKind.EnumDeclaration:
                     return ((EnumDeclarationSyntax)node).Identifier;
+                case SyntaxKind.RecordDeclaration:
+                    return ((RecordDeclarationSyntax)node).Identifier;
                 case SyntaxKind.DelegateDeclaration:
                     return ((DelegateDeclarationSyntax)node).Identifier;
                 case SyntaxKind.ClassDeclaration:
@@ -147,6 +150,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                     case SyntaxKind.DelegateDeclaration:
                         tpl = ((DelegateDeclarationSyntax)typeDecl).TypeParameterList;
+                        break;
+
+                    case SyntaxKind.RecordDeclaration:
+                        tpl = ((RecordDeclarationSyntax)typeDecl).TypeParameterList;
                         break;
 
                     case SyntaxKind.EnumDeclaration:
@@ -342,6 +349,10 @@ next:;
                     var delegateDeclaration = (DelegateDeclarationSyntax)node;
                     typeParameterList = delegateDeclaration.TypeParameterList;
                     return delegateDeclaration.ConstraintClauses;
+                case SyntaxKind.RecordDeclaration:
+                    var recordDeclaration = (RecordDeclarationSyntax)node;
+                    typeParameterList = recordDeclaration.TypeParameterList;
+                    return recordDeclaration.ConstraintClauses;
                 default:
                     throw ExceptionUtilities.UnexpectedValue(node.Kind());
             }
@@ -607,6 +618,7 @@ next:;
 
                     case TypeKind.Struct:
                     case TypeKind.Class:
+                    case TypeKind.Record:
                         return AttributeLocation.Type;
 
                     default:

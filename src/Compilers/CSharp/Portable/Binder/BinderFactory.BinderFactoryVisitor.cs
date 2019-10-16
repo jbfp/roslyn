@@ -569,6 +569,38 @@ namespace Microsoft.CodeAnalysis.CSharp
                 return false;
             }
 
+            public override Binder VisitRecordDeclaration(RecordDeclarationSyntax parent)
+            {
+                if (!LookupPosition.IsInRecordDeclaration(_position, parent))
+                {
+                    return VisitCore(parent.Parent);
+                }
+
+                var key = CreateBinderCacheKey(parent, usage: NodeUsage.Normal);
+
+                Binder resultBinder;
+                if (!binderCache.TryGetValue(key, out resultBinder))
+                {
+                    Binder outer = VisitCore(parent.Parent); // a binder for the body of the enclosing type or namespace
+                    var container = ((NamespaceOrTypeSymbol)outer.ContainingMemberOrLambda).GetSourceTypeMember(parent);
+
+                    // NOTE: Members of the record type are in scope in the entire record declaration syntax.
+                    // NOTE: Hence we can assume that we are in body of the record type and explicitly insert the InContainerBinder in the binder chain.
+                    resultBinder = new InContainerBinder(container, outer);
+
+                    if (parent.TypeParameterList != null)
+                    {
+                        resultBinder = new WithClassTypeParametersBinder(container, resultBinder);
+                    }
+
+                    resultBinder = resultBinder.WithUnsafeRegionIfNecessary(parent.Modifiers);
+
+                    binderCache.TryAdd(key, resultBinder);
+                }
+
+                return resultBinder;
+            }
+
             public override Binder VisitDelegateDeclaration(DelegateDeclarationSyntax parent)
             {
                 if (!LookupPosition.IsInDelegateDeclaration(_position, parent))

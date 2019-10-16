@@ -20,6 +20,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.Class:
                 case TypeKind.TypeParameter:
                 case TypeKind.Interface:
+                case TypeKind.Record:
                     break;
                 default:
                     return true;

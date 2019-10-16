@@ -76,6 +76,8 @@ namespace Microsoft.CodeAnalysis
         ExtensionMethodName = 29,
         /// <summary>The name of a field or local constant.</summary>
         ConstantName = 30,
+        /// <summary>The name of a record.</summary>
+        RecordName = 31,
     }
 
     internal static class InternalSymbolDisplayPartKind
@@ -89,7 +91,7 @@ namespace Microsoft.CodeAnalysis
     {
         internal static bool IsValid(this SymbolDisplayPartKind value)
         {
-            return (value >= SymbolDisplayPartKind.AliasName && value <= SymbolDisplayPartKind.ConstantName) ||
+            return (value >= SymbolDisplayPartKind.AliasName && value <= SymbolDisplayPartKind.RecordName) ||
                 (value >= InternalSymbolDisplayPartKind.Arity && value <= InternalSymbolDisplayPartKind.Other);
         }
     }

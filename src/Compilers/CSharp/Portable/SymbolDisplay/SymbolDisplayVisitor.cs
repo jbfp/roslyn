@@ -78,6 +78,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case SymbolDisplayPartKind.LocalName:
                 case SymbolDisplayPartKind.NamespaceName:
                 case SymbolDisplayPartKind.ParameterName:
+                case SymbolDisplayPartKind.RecordName:
                     return true;
                 default:
                     return false;

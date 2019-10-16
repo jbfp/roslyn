@@ -519,6 +519,7 @@ namespace Microsoft.CodeAnalysis.CSharp
                 case TypeKind.Delegate:
                 case TypeKind.Enum:
                 case TypeKind.Struct:
+                case TypeKind.Record:
                     // "'{0}' is not a valid constraint. A type used as a constraint must be an interface, a non-sealed class or a type parameter."
                     Error(diagnostics, ErrorCode.ERR_BadBoundType, syntax, type);
                     return false;

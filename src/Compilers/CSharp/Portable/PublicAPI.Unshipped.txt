@@ -24,6 +24,7 @@ Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.AddConstraintClause
 Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.AddModifiers(params Microsoft.CodeAnalysis.SyntaxToken[] items) -> Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax
 Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.AddParameterListParameters(params Microsoft.CodeAnalysis.CSharp.Syntax.ParameterSyntax[] items) -> Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax
 Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.AddTypeParameterListParameters(params Microsoft.CodeAnalysis.CSharp.Syntax.TypeParameterSyntax[] items) -> Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax
+Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.Arity.get -> int
 Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.ConstraintClauses.get -> Microsoft.CodeAnalysis.SyntaxList<Microsoft.CodeAnalysis.CSharp.Syntax.TypeParameterConstraintClauseSyntax>
 Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.Identifier.get -> Microsoft.CodeAnalysis.SyntaxToken
 Microsoft.CodeAnalysis.CSharp.Syntax.RecordDeclarationSyntax.ParameterList.get -> Microsoft.CodeAnalysis.CSharp.Syntax.ParameterListSyntax

@@ -475,9 +475,10 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
         {
             switch (this.TypeKind)
             {
-                // These checks don't make sense for enums and delegates:
+                // These checks don't make sense for enums, delegates, and records:
                 case TypeKind.Enum:
                 case TypeKind.Delegate:
+                case TypeKind.Record:
                     return;
 
                 case TypeKind.Class:
