@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using Microsoft.Cci;
 using Microsoft.CodeAnalysis.CSharp.Emit;
@@ -39,6 +40,7 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
             symbols.Add(new EqualsMethodSymbol(recordType));
             symbols.Add(new GetHashCodeMethodSymbol(recordType));
             symbols.Add(new ToStringMethodSymbol(recordType));
+            symbols.Add(new DeconstructMethodSymbol(recordType, syntax, diagnostics));
         }
 
         private sealed class Property : PropertySymbol
@@ -581,6 +583,92 @@ namespace Microsoft.CodeAnalysis.CSharp.Symbols
 
                 // Create a bound block 
                 F.CloseMethod(F.Block(F.Return(retExpression)));
+            }
+        }
+
+        private sealed class DeconstructMethodSymbol : SynthesizedMethodBase
+        {
+            internal DeconstructMethodSymbol(
+                SourceMemberContainerTypeSymbol container,
+                RecordDeclarationSyntax syntax,
+                DiagnosticBag diagnostics)
+                : base(container, WellKnownMemberNames.DeconstructMethodName)
+            {
+                var binder = container.GetBinder(syntax.ParameterList);
+                var outToken = SyntaxFactory.Token(SyntaxKind.OutKeyword);
+                var parametersWithOut = syntax.ParameterList.WithParameters(
+                    SyntaxFactory.SeparatedList(
+                        syntax
+                            .ParameterList
+                            .Parameters
+                            .SelectAsArray(p => p.AddModifiers(outToken))));
+
+                Parameters = ParameterHelpers.MakeParameters(
+                    binder,
+                    owner: this,
+                    syntax: parametersWithOut,
+                    arglistToken: out var _,
+                    diagnostics: diagnostics,
+                    allowRefOrOut: true,
+                    allowThis: false,
+                    addRefReadOnlyModifier: false);
+
+                ReturnTypeWithAnnotations = TypeWithAnnotations.Create(
+                    binder.GetSpecialType(SpecialType.System_Void, diagnostics, syntax));
+            }
+
+            public override MethodKind MethodKind => MethodKind.Ordinary;
+            public override bool ReturnsVoid => true;
+            public override RefKind RefKind => RefKind.None;
+            public override TypeWithAnnotations ReturnTypeWithAnnotations { get; }
+            public override ImmutableArray<ParameterSymbol> Parameters { get; }
+            public override bool IsOverride => false;
+            internal sealed override bool IsMetadataVirtual(bool ignoreInterfaceImplementationChanges = false) => false;
+            internal override bool IsMetadataFinal => false;
+            public override ImmutableArray<Location> Locations => ContainingSymbol.Locations;
+            internal override bool HasSpecialName => false;
+
+            internal override void GenerateMethodBody(TypeCompilationState compilationState, DiagnosticBag diagnostics)
+            {
+                //  Method body:
+                //
+                //  {
+                //      arg1 = this = this.backingField_1;
+                //      ...
+                //      argN = this.backingField_N;
+                //  }
+                SyntheticBoundNodeFactory F = CreateBoundNodeFactory(compilationState, diagnostics);
+
+                int paramCount = ParameterCount;
+
+                // List of statements
+                BoundStatement[] statements = new BoundStatement[paramCount + 1];
+                int statementIndex = 0;
+
+                if (paramCount > 0)
+                {
+                    var properties = this
+                        .ContainingType
+                        .GetMembers()
+                        .WhereAsArray(s => s.Kind == SymbolKind.Property)
+                        .SelectAsArray(s => (Property)s);
+
+                    Debug.Assert(properties.Length == paramCount);
+
+                    // Assign fields
+                    for (int index = 0; index < ParameterCount; index++)
+                    {
+                        // Generate 'field' = 'parameter' statement
+                        statements[statementIndex++] =
+                            F.Assignment(F.Parameter(Parameters[index]), F.Field(F.This(), properties[index].BackingField));
+                    }
+                }
+
+                // Final return statement
+                statements[statementIndex++] = F.Return();
+
+                // Create a bound block
+                F.CloseMethod(F.Block(statements));
             }
         }
 
